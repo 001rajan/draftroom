@@ -1,0 +1,21 @@
+{
+  "name": "draftroom-server",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch src/server.js",
+    "start": "node src/server.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "bcryptjs": "latest",
+    "cors": "latest",
+    "dotenv": "latest",
+    "express": "latest",
+    "express-rate-limit": "^8.7.1",
+    "jsonwebtoken": "latest",
+    "mongoose": "latest",
+    "nodemailer": "^10.3.0"
+  }
+}

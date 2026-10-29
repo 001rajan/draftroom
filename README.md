@@ -1,0 +1,73 @@
+# Draftroom Starter
+
+A VS Code-ready starter for **Draftroom – Collaborative Story Writing & Publishing Community**.
+
+Draftroom is a story-writing platform for collaborative writing, publishing, and story interaction analytics.
+
+## Stack
+- React + Vite
+- React Router
+- Axios
+- Recharts
+- Node.js + Express
+- MongoDB + Mongoose
+- JWT/bcrypt dependencies included for the next authentication step
+
+## Run locally
+
+1. Install Node.js LTS.
+2. Open this folder in VS Code.
+3. From the project root run:
+   ```bash
+   npm install
+   npm install --workspace client
+   npm install --workspace server
+   ```
+4. Start MongoDB locally with:
+   `mongodb://127.0.0.1:27017/draftroom`
+5. Copy `server/.env.example` to `server/.env`.
+6. Run:
+   ```bash
+   npm run dev
+   ```
+
+Frontend: http://localhost:5173  
+Backend: http://localhost:5000  
+Health check: http://localhost:5000/api/health
+
+## Account and moderation setup
+
+- Password reset email requires `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_SECURE`, and `MAIL_FROM` in `server/.env`. Without SMTP configured, reset requests return a setup message.
+- To grant moderation and challenge-management access, set the intended user's `role` field to `admin` in the MongoDB `users` collection. New accounts are regular writers.
+- Run backend unit tests with `npm run test --workspace server`.
+
+## Current feature scope
+
+- Stories: public reader, chapters, search/genre/sort, reading counts, likes, comments, bookmarks, writer follows, and report intake.
+- Challenges: administrators create prompts; writers submit or revise one entry per challenge; admins can select a winner.
+- Analytics: author totals and daily signed-in reads are backed by stored story and activity records.
+- Moderation: administrators review reports and can hide a reported story.
+
+Live multi-user editing, email verification, and password-reset email delivery depend on external services and are not enabled until configured.
+
+## Included
+- Account registration, login, and optional SMTP password reset
+- Public writer profiles and follows
+- Multi-chapter story creation, editing, publishing, and reading
+- Explore search, genre filtering, and sorting
+- Likes, comments, bookmarks, and reader counts
+- Collaborative story invitations and shared editing
+- Challenge creation, submissions, and winner selection
+- Writer analytics based on stored story and reader activity
+- User reports and admin moderation queue
+- Request throttling for authentication and report routes
+- Backend validation tests
+
+## Next learning/build order
+1. Add email verification and configure SMTP for password reset
+2. Add moderation audit history and an admin bootstrap process
+3. Add per-chapter retention analytics and richer challenge judging
+4. Add live multi-user editing with conflict handling
+5. Add image storage, notifications, and end-to-end integration tests
+
+The scaffold deliberately avoids production complexity in the first step so you can learn each module and build it yourself.
