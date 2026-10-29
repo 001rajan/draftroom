@@ -3,6 +3,8 @@ import cors from "cors";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import rateLimit from "express-rate-limit";
+import path from "node:path";
+import {fileURLToPath} from "node:url";
 import storyRoutes from "../routes/storyRoutes.js";
 import authRoutes from "../routes/authRoutes.js";
 import challengeRoutes from "../routes/challengeRoutes.js";
@@ -16,7 +18,8 @@ if(!process.env.JWT_SECRET||process.env.JWT_SECRET.length<32){
   throw new Error("Set JWT_SECRET to a random value of at least 32 characters in server/.env");
 }
 const app = express();
-app.use(cors({origin:process.env.CLIENT_URL||"http://localhost:5173"}));
+const clientDist=path.resolve(path.dirname(fileURLToPath(import.meta.url)),"../../client/dist");
+app.use(cors({origin:process.env.CLIENT_URL||process.env.RENDER_EXTERNAL_URL||"http://localhost:5173"}));
 app.use(express.json());
 const authLimiter=rateLimit({windowMs:15*60*1000,limit:30,standardHeaders:"draft-8",legacyHeaders:false,message:{message:"Too many account requests. Try again later."}});
 app.use("/api/auth",authLimiter);
@@ -29,6 +32,11 @@ app.use("/api/profiles", profileRoutes);
 app.use("/api/analytics", analyticsRoutes);
 app.use("/api/reports", reportRoutes);
 app.use("/api/stories", storyRoutes);
+app.use(express.static(clientDist));
+app.use((req,res,next)=>{
+  if(req.method!=="GET"||req.path.startsWith("/api/"))return next();
+  res.sendFile(path.join(clientDist,"index.html"),err=>{if(err)next(err);});
+});
 app.use((err,_req,res,_next)=>{
   console.error(err);
   res.status(err.status||500).json({message:err.status&&err.status<500?err.message:"Unexpected server error"});

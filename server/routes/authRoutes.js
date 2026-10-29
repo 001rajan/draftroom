@@ -59,7 +59,7 @@ router.post("/password-reset/request",async(req,res,next)=>{
       user.passwordResetExpires=new Date(Date.now()+30*60*1000);
       await user.save();
       const transporter=nodemailer.createTransport({host:process.env.SMTP_HOST,port:Number(process.env.SMTP_PORT)||587,secure:process.env.SMTP_SECURE==="true",auth:{user:process.env.SMTP_USER,pass:process.env.SMTP_PASS}});
-      const resetUrl=`${process.env.CLIENT_URL||"http://localhost:5173"}/reset-password?token=${token}`;
+      const resetUrl=`${process.env.CLIENT_URL||process.env.RENDER_EXTERNAL_URL||"http://localhost:5173"}/reset-password?token=${token}`;
       await transporter.sendMail({from:process.env.MAIL_FROM,to:user.email,subject:"Reset your Draftroom password",text:`Use this link within 30 minutes to reset your Draftroom password: ${resetUrl}`});
     }
     res.json({message:"If an account exists for that email, a reset link has been sent."});
